@@ -9,6 +9,12 @@
 
 FundRaise Pro is a comprehensive fundraising campaign management application that enables nonprofit organizations to create, monitor, and manage their fundraising campaigns with ease. Built with modern web technologies and featuring a beautiful, responsive design system with both light and dark modes.
 
+## 🌐 Live Demo
+
+**[View Live Site →](https://fundraise-pro.vercel.app/dashboard)**
+
+Experience the full application with all features including real-time analytics, campaign management, and interactive charts.
+
 ## ✨ Features
 
 - **📊 Real-time Dashboard** - Monitor campaign performance with live donation tracking and analytics
