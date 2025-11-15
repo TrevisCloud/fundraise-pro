@@ -196,16 +196,16 @@ export default function IntegrationsPage() {
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-background">
       <Navbar />
       <div className="p-6">
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Integrations</h1>
-              <p className="text-gray-600 mt-2">Connect your favorite tools to streamline your fundraising efforts</p>
+              <h1 className="text-3xl font-bold text-foreground">Integrations</h1>
+              <p className="text-muted-foreground mt-2">Connect your favorite tools to streamline your fundraising efforts</p>
             </div>
-            <button className="inline-flex items-center justify-center font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">
+            <button className="inline-flex items-center justify-center font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer bg-primary text-primary-foreground hover:opacity-90 px-4 py-2 text-sm">
               <i className="ri-add-line mr-2"></i>
               Request Integration
             </button>
@@ -213,19 +213,19 @@ export default function IntegrationsPage() {
 
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <i className="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              <i className="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
               <input
                 type="text"
                 placeholder="Search integrations..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                className="pl-10 pr-4 py-2 w-full border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-sm bg-card text-foreground"
               />
             </div>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm pr-8"
+              className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-sm pr-8 bg-card text-foreground"
             >
               {categories.map(category => (
                 <option key={category.id} value={category.id}>{category.name}</option>
@@ -235,15 +235,15 @@ export default function IntegrationsPage() {
         </div>
 
         <div className="mb-8">
-          <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
+          <div className="flex space-x-1 bg-muted p-1 rounded-lg w-fit">
             {categories.slice(0, 6).map(category => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap cursor-pointer ${
                   selectedCategory === category.id
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-card text-primary shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 <i className={`${category.icon} mr-2`}></i>
@@ -255,31 +255,31 @@ export default function IntegrationsPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredIntegrations.map(integration => (
-            <div key={integration.id} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div key={integration.id} className="bg-card rounded-lg border border-border p-6 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <i className={`${integration.icon} text-xl text-gray-600`}></i>
+                  <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+                    <i className={`${integration.icon} text-xl text-muted-foreground`}></i>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">{integration.name}</h3>
+                    <h3 className="text-lg font-semibold text-foreground">{integration.name}</h3>
                     {getStatusBadge(integration.status)}
                   </div>
                 </div>
               </div>
 
-              <p className="text-gray-600 mb-4 text-sm leading-relaxed">{integration.description}</p>
+              <p className="text-muted-foreground mb-4 text-sm leading-relaxed">{integration.description}</p>
 
               <div className="mb-4">
-                <h4 className="text-sm font-medium text-gray-900 mb-2">Features</h4>
+                <h4 className="text-sm font-medium text-foreground mb-2">Features</h4>
                 <div className="flex flex-wrap gap-1">
                   {integration.features.slice(0, 3).map(feature => (
-                    <span key={feature} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                    <span key={feature} className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">
                       {feature}
                     </span>
                   ))}
                   {integration.features.length > 3 && (
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                    <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">
                       +{integration.features.length - 3} more
                     </span>
                   )}
@@ -297,19 +297,19 @@ export default function IntegrationsPage() {
                       <i className="ri-check-line mr-2"></i>
                       Connected
                     </button>
-                    <button className="inline-flex items-center justify-center font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer border border-gray-300 text-gray-700 hover:bg-gray-50 px-3 py-2 text-sm">
+                    <button className="inline-flex items-center justify-center font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer border border-border text-foreground hover:bg-muted px-3 py-2 text-sm">
                       <i className="ri-settings-line"></i>
                     </button>
                   </>
                 ) : integration.status === 'available' ? (
-                  <button className="flex-1 inline-flex items-center justify-center font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer bg-blue-600 text-white hover:bg-blue-700 px-3 py-2 text-sm">
+                  <button className="flex-1 inline-flex items-center justify-center font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer bg-primary text-primary-foreground hover:opacity-90 px-3 py-2 text-sm">
                     <i className="ri-plug-line mr-2"></i>
                     Connect
                   </button>
                 ) : (
                   <button
                     disabled
-                    className="flex-1 inline-flex items-center justify-center font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border border-gray-300 text-gray-700 px-3 py-2 text-sm"
+                    className="flex-1 inline-flex items-center justify-center font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border border-border text-muted-foreground px-3 py-2 text-sm"
                   >
                     <i className="ri-time-line mr-2"></i>
                     Coming Soon
@@ -322,21 +322,21 @@ export default function IntegrationsPage() {
 
         {filteredIntegrations.length === 0 && (
           <div className="text-center py-12">
-            <i className="ri-search-line text-4xl text-gray-300 mb-4"></i>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No integrations found</h3>
-            <p className="text-gray-600">Try adjusting your search or filter criteria</p>
+            <i className="ri-search-line text-4xl text-muted mb-4"></i>
+            <h3 className="text-lg font-medium text-foreground mb-2">No integrations found</h3>
+            <p className="text-muted-foreground">Try adjusting your search or filter criteria</p>
           </div>
         )}
 
-        <div className="mt-12 bg-blue-50 rounded-lg p-6">
+        <div className="mt-12 bg-secondary rounded-lg p-6">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <i className="ri-lightbulb-line text-2xl text-blue-600"></i>
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+              <i className="ri-lightbulb-line text-2xl text-primary"></i>
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Need a custom integration?</h3>
-              <p className="text-gray-600 mb-4">Our team can help you connect with any tool your organization uses. Get in touch to discuss custom integration options.</p>
-              <button className="inline-flex items-center justify-center font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 text-sm">
+              <h3 className="text-lg font-semibold text-foreground mb-2">Need a custom integration?</h3>
+              <p className="text-muted-foreground mb-4">Our team can help you connect with any tool your organization uses. Get in touch to discuss custom integration options.</p>
+              <button className="inline-flex items-center justify-center font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer bg-primary text-primary-foreground hover:opacity-90 px-4 py-2 text-sm">
                 <i className="ri-chat-3-line mr-2"></i>
                 Contact Support
               </button>
@@ -344,6 +344,6 @@ export default function IntegrationsPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

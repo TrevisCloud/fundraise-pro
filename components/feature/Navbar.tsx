@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTheme } from '@/components/theme-provider';
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: 'ri-dashboard-line' },
@@ -46,6 +48,13 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-muted-foreground hover:text-foreground rounded-md transition-colors"
+              aria-label="Toggle theme"
+            >
+              <i className={`${theme === 'dark' ? 'ri-sun-line' : 'ri-moon-line'} text-xl`}></i>
+            </button>
             <button className="p-2 text-muted-foreground hover:text-foreground rounded-md">
               <i className="ri-notification-line text-xl"></i>
             </button>

@@ -1,42 +1,131 @@
-@import "tailwindcss";
+/**
+ * Generate Theme CSS
+ *
+ * This script reads theme-config.ts and generates CSS with proper OKLCH values
+ * Run: node scripts/generate-theme-css.mjs
+ */
+
+import { formatHex, formatCss, converter } from 'culori';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const projectRoot = join(__dirname, '..');
+
+// Import theme config (we'll read it as a module)
+const themeConfigPath = join(projectRoot, 'lib/theme-config.ts');
+
+// For this script, we'll define the colors directly
+// In production, you could use ts-node or compile the TS file first
+const themeConfig = {
+  light: {
+    background: "#FAFAF9",
+    foreground: "#292524",
+    card: "#FFFFFF",
+    cardForeground: "#292524",
+    popover: "#FFFFFF",
+    popoverForeground: "#292524",
+    primary: "#F97316",
+    primaryForeground: "#FFFFFF",
+    secondary: "#FEF3E2",
+    secondaryForeground: "#C2410C",
+    muted: "#F5F5F4",
+    mutedForeground: "#78716C",
+    accent: "#FDE68A",
+    accentForeground: "#292524",
+    destructive: "#DC2626",
+    destructiveForeground: "#FFFFFF",
+    border: "#E7E5E4",
+    input: "#E7E5E4",
+    ring: "#F97316",
+    chart1: "#F97316",
+    chart2: "#FDE68A",
+    chart3: "#FEF3C7",
+    chart4: "#FED7AA",
+    chart5: "#C2410C",
+    sidebar: "#F5F5F4",
+    sidebarForeground: "#292524",
+    sidebarPrimary: "#F97316",
+    sidebarPrimaryForeground: "#FFFFFF",
+    sidebarAccent: "#FDE68A",
+    sidebarAccentForeground: "#292524",
+    sidebarBorder: "#E7E5E4",
+    sidebarRing: "#F97316",
+  },
+  dark: {
+    background: "#1C1917",
+    foreground: "#F5F5F4",
+    card: "#292524",
+    cardForeground: "#F5F5F4",
+    popover: "#292524",
+    popoverForeground: "#F5F5F4",
+    primary: "#FB923C",
+    primaryForeground: "#FFFFFF",
+    secondary: "#44403C",
+    secondaryForeground: "#F5F5F4",
+    muted: "#292524",
+    mutedForeground: "#D6D3D1",
+    accent: "#FDE68A",
+    accentForeground: "#1C1917",
+    destructive: "#DC2626",
+    destructiveForeground: "#FFFFFF",
+    border: "#44403C",
+    input: "#44403C",
+    ring: "#F97316",
+    chart1: "#F97316",
+    chart2: "#FDE68A",
+    chart3: "#FEF3C7",
+    chart4: "#FED7AA",
+    chart5: "#C2410C",
+    sidebar: "#1C1917",
+    sidebarForeground: "#F5F5F4",
+    sidebarPrimary: "#F97316",
+    sidebarPrimaryForeground: "#FFFFFF",
+    sidebarAccent: "#FDE68A",
+    sidebarAccentForeground: "#1C1917",
+    sidebarBorder: "#44403C",
+    sidebarRing: "#F97316",
+  },
+};
+
+// Convert hex to OKLCH
+const hexToOklch = (hex) => {
+  const oklch = converter('oklch');
+  const color = oklch(hex);
+  if (!color) return 'oklch(0 0 0)';
+
+  const l = color.l !== undefined ? color.l.toFixed(4) : '0';
+  const c = color.c !== undefined ? color.c.toFixed(4) : '0';
+  const h = color.h !== undefined ? color.h.toFixed(4) : '0';
+
+  return `oklch(${l} ${c} ${h})`;
+};
+
+// Convert object to CSS variables
+const generateCSSVars = (colors, prefix = '') => {
+  return Object.entries(colors)
+    .map(([key, value]) => {
+      const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+      return `  --${prefix}${cssKey}: ${hexToOklch(value)};`;
+    })
+    .join('\n');
+};
+
+// Generate the full CSS
+const generateCSS = () => {
+  const lightVars = generateCSSVars(themeConfig.light);
+  const darkVars = generateCSSVars(themeConfig.dark);
+
+  return `@import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.9856 0.0084 56.3169);
-  --foreground: oklch(0.3353 0.0132 2.7676);
-  --card: oklch(1.0000 0 0);
-  --card-foreground: oklch(0.3353 0.0132 2.7676);
-  --popover: oklch(1.0000 0 0);
-  --popover-foreground: oklch(0.3353 0.0132 2.7676);
-  --primary: oklch(0.7357 0.1641 34.7091);
-  --primary-foreground: oklch(1.0000 0 0);
-  --secondary: oklch(0.9596 0.0200 28.9029);
-  --secondary-foreground: oklch(0.5587 0.1294 32.7364);
-  --muted: oklch(0.9656 0.0176 39.4009);
-  --muted-foreground: oklch(0.5534 0.0116 58.0708);
-  --accent: oklch(0.8278 0.1131 57.9984);
-  --accent-foreground: oklch(0.3353 0.0132 2.7676);
-  --destructive: oklch(0.6122 0.2082 22.2410);
-  --destructive-foreground: oklch(1.0000 0 0);
-  --border: oklch(0.9296 0.0370 38.6868);
-  --input: oklch(0.9296 0.0370 38.6868);
-  --ring: oklch(0.7357 0.1641 34.7091);
-  --chart-1: oklch(0.7357 0.1641 34.7091);
-  --chart-2: oklch(0.8278 0.1131 57.9984);
-  --chart-3: oklch(0.8773 0.0763 54.9314);
-  --chart-4: oklch(0.8200 0.1054 40.8859);
-  --chart-5: oklch(0.6368 0.1306 32.0721);
+${lightVars}
   --radius: 0.625rem;
-  --sidebar: oklch(0.9656 0.0176 39.4009);
-  --sidebar-foreground: oklch(0.3353 0.0132 2.7676);
-  --sidebar-primary: oklch(0.7357 0.1641 34.7091);
-  --sidebar-primary-foreground: oklch(1.0000 0 0);
-  --sidebar-accent: oklch(0.8278 0.1131 57.9984);
-  --sidebar-accent-foreground: oklch(0.3353 0.0132 2.7676);
-  --sidebar-border: oklch(0.9296 0.0370 38.6868);
-  --sidebar-ring: oklch(0.7357 0.1641 34.7091);
   --font-sans: Montserrat, sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
@@ -159,39 +248,8 @@
 }
 
 .dark {
-  --background: oklch(0.1552 0.0072 1.1452);
-  --foreground: oklch(0.9397 0.0119 51.3156);
-  --card: oklch(0.3184 0.0176 341.4465);
-  --card-foreground: oklch(0.9397 0.0119 51.3156);
-  --popover: oklch(0.3184 0.0176 341.4465);
-  --popover-foreground: oklch(0.9397 0.0119 51.3156);
-  --primary: oklch(0.7195 0.2085 350.6687);
-  --primary-foreground: oklch(1.0000 0 0);
-  --secondary: oklch(0.3637 0.0203 342.2664);
-  --secondary-foreground: oklch(0.9397 0.0119 51.3156);
-  --muted: oklch(0.2848 0.0159 343.6554);
-  --muted-foreground: oklch(0.8378 0.0237 52.6346);
-  --accent: oklch(0.8278 0.1131 57.9984);
-  --accent-foreground: oklch(0.2569 0.0169 352.4042);
-  --destructive: oklch(0.6122 0.2082 22.2410);
-  --destructive-foreground: oklch(1.0000 0 0);
-  --border: oklch(0.3637 0.0203 342.2664);
-  --input: oklch(0.3637 0.0203 342.2664);
-  --ring: oklch(0.7357 0.1641 34.7091);
-  --chart-1: oklch(0.7357 0.1641 34.7091);
-  --chart-2: oklch(0.8278 0.1131 57.9984);
-  --chart-3: oklch(0.8773 0.0763 54.9314);
-  --chart-4: oklch(0.8200 0.1054 40.8859);
-  --chart-5: oklch(0.6368 0.1306 32.0721);
+${darkVars}
   --radius: 0.625rem;
-  --sidebar: oklch(0.2569 0.0169 352.4042);
-  --sidebar-foreground: oklch(0.9397 0.0119 51.3156);
-  --sidebar-primary: oklch(0.7357 0.1641 34.7091);
-  --sidebar-primary-foreground: oklch(1.0000 0 0);
-  --sidebar-accent: oklch(0.8278 0.1131 57.9984);
-  --sidebar-accent-foreground: oklch(0.2569 0.0169 352.4042);
-  --sidebar-border: oklch(0.3637 0.0203 342.2664);
-  --sidebar-ring: oklch(0.7357 0.1641 34.7091);
   --font-sans: Montserrat, sans-serif;
   --font-serif: Merriweather, serif;
   --font-mono: Ubuntu Mono, monospace;
@@ -221,3 +279,18 @@
     @apply bg-background text-foreground;
   }
 }
+`;
+};
+
+// Write the CSS file
+const outputPath = join(projectRoot, 'app/globals.css');
+const css = generateCSS();
+
+fs.writeFileSync(outputPath, css, 'utf8');
+
+console.log('✅ Theme CSS generated successfully!');
+console.log(`📁 Output: ${outputPath}`);
+console.log('\n💡 To update colors:');
+console.log('   1. Edit lib/theme-config.ts');
+console.log('   2. Run: node scripts/generate-theme-css.mjs');
+console.log('   3. Restart dev server');

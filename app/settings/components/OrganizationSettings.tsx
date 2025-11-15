@@ -25,13 +25,13 @@ export default function OrganizationSettings() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">Organization Information</h2>
-          <p className="text-sm text-gray-600 mt-1">Manage your nonprofit organization details</p>
+          <h2 className="text-xl font-semibold text-foreground">Organization Information</h2>
+          <p className="text-sm text-muted-foreground mt-1">Manage your nonprofit organization details</p>
         </div>
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-colors"
           >
             Edit Information
           </button>
@@ -39,13 +39,13 @@ export default function OrganizationSettings() {
           <div className="flex space-x-3">
             <button
               onClick={() => setIsEditing(false)}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-border text-foreground rounded-lg hover:bg-muted transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-colors"
             >
               Save Changes
             </button>
@@ -53,115 +53,115 @@ export default function OrganizationSettings() {
         )}
       </div>
 
-      <div className="bg-gray-50 rounded-lg p-6">
+      <div className="bg-muted rounded-lg p-6">
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Organization Name</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Organization Name</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               disabled={!isEditing}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-600"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted disabled:text-muted-foreground bg-card text-foreground"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">EIN (Tax ID)</label>
+              <label className="block text-sm font-medium text-foreground mb-2">EIN (Tax ID)</label>
               <input
                 type="text"
                 value={formData.ein}
                 onChange={(e) => setFormData({ ...formData, ein: e.target.value })}
                 disabled={!isEditing}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-600"
+                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted disabled:text-muted-foreground bg-card text-foreground"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Website</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Website</label>
               <input
                 type="url"
                 value={formData.website}
                 onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                 disabled={!isEditing}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-600"
+                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted disabled:text-muted-foreground bg-card text-foreground"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Street Address</label>
             <input
               type="text"
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
               disabled={!isEditing}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-600"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted disabled:text-muted-foreground bg-card text-foreground"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+              <label className="block text-sm font-medium text-foreground mb-2">City</label>
               <input
                 type="text"
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                 disabled={!isEditing}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-600"
+                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted disabled:text-muted-foreground bg-card text-foreground"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
+              <label className="block text-sm font-medium text-foreground mb-2">State</label>
               <input
                 type="text"
                 value={formData.state}
                 onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                 disabled={!isEditing}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-600"
+                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted disabled:text-muted-foreground bg-card text-foreground"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">ZIP Code</label>
+              <label className="block text-sm font-medium text-foreground mb-2">ZIP Code</label>
               <input
                 type="text"
                 value={formData.zip}
                 onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
                 disabled={!isEditing}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-600"
+                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted disabled:text-muted-foreground bg-card text-foreground"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Country</label>
             <input
               type="text"
               value={formData.country}
               onChange={(e) => setFormData({ ...formData, country: e.target.value })}
               disabled={!isEditing}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-600"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted disabled:text-muted-foreground bg-card text-foreground"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Mission Statement</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Mission Statement</label>
             <textarea
               value={formData.mission}
               onChange={(e) => setFormData({ ...formData, mission: e.target.value })}
               disabled={!isEditing}
               rows={4}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-600"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted disabled:text-muted-foreground bg-card text-foreground"
             />
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200">
+          <div className="flex items-center justify-between p-4 bg-card rounded-lg border border-border">
             <div>
-              <h4 className="font-medium text-gray-900">Tax-Exempt Status</h4>
-              <p className="text-sm text-gray-600">501(c)(3) nonprofit organization</p>
+              <h4 className="font-medium text-foreground">Tax-Exempt Status</h4>
+              <p className="text-sm text-muted-foreground">501(c)(3) nonprofit organization</p>
             </div>
             <div className="flex items-center space-x-2">
               <i className="ri-checkbox-circle-fill text-green-500 text-xl"></i>
