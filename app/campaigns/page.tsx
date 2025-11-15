@@ -10,7 +10,7 @@ import { mockCampaigns } from '@/lib/mocks';
 export const dynamic = 'force-dynamic';
 
 export default function Campaigns() {
-  const [campaigns, setCampaigns] = useState(mockCampaigns);
+  const [campaigns] = useState(mockCampaigns);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -32,14 +32,14 @@ export default function Campaigns() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Campaign Management</h1>
-              <p className="text-gray-600">Create, monitor, and manage your fundraising campaigns</p>
+              <h1 className="text-3xl font-bold text-foreground mb-2">Campaign Management</h1>
+              <p className="text-muted-foreground">Create, monitor, and manage your fundraising campaigns</p>
             </div>
             <Button onClick={() => setShowCreateModal(true)}>
               <i className="ri-add-line mr-2"></i>
@@ -52,11 +52,11 @@ export default function Campaigns() {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
-                  <label className="text-sm font-medium text-gray-700">Filter:</label>
+                  <label className="text-sm font-medium text-foreground">Filter:</label>
                   <select
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
-                    className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-8"
+                    className="border border-border rounded-md px-3 py-1 text-sm focus:ring-2 focus:ring-ring focus:border-ring pr-8"
                   >
                     <option value="all">All Campaigns</option>
                     <option value="active">Active</option>
@@ -66,13 +66,13 @@ export default function Campaigns() {
                 </div>
               </div>
               <div className="relative">
-                <i className="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <i className="ri-search-line absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"></i>
                 <input
                   type="text"
                   placeholder="Search campaigns..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  className="pl-10 pr-4 py-2 border border-border rounded-md focus:ring-2 focus:ring-ring focus:border-ring text-sm"
                 />
               </div>
             </div>
@@ -81,26 +81,26 @@ export default function Campaigns() {
           {/* Campaign Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <Card className="text-center" padding="sm">
-              <div className="text-2xl font-bold text-blue-600">{campaigns.length}</div>
-              <div className="text-sm text-gray-600">Total Campaigns</div>
+              <div className="text-2xl font-bold text-primary">{campaigns.length}</div>
+              <div className="text-sm text-muted-foreground">Total Campaigns</div>
             </Card>
             <Card className="text-center" padding="sm">
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-primary">
                 {campaigns.filter(c => c.status === 'active').length}
               </div>
-              <div className="text-sm text-gray-600">Active</div>
+              <div className="text-sm text-muted-foreground">Active</div>
             </Card>
             <Card className="text-center" padding="sm">
-              <div className="text-2xl font-bold text-purple-600">
+              <div className="text-2xl font-bold text-primary">
                 {campaigns.filter(c => c.status === 'completed').length}
               </div>
-              <div className="text-sm text-gray-600">Completed</div>
+              <div className="text-sm text-muted-foreground">Completed</div>
             </Card>
             <Card className="text-center" padding="sm">
-              <div className="text-2xl font-bold text-orange-600">
+              <div className="text-2xl font-bold text-primary">
                 ${campaigns.reduce((sum, c) => sum + c.raised, 0).toLocaleString()}
               </div>
-              <div className="text-sm text-gray-600">Total Raised</div>
+              <div className="text-sm text-muted-foreground">Total Raised</div>
             </Card>
           </div>
 
@@ -123,29 +123,29 @@ export default function Campaigns() {
 
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-blue-600 font-medium">{campaign.category}</span>
-                    <span className="text-xs text-gray-500">{campaign.donorCount} donors</span>
+                    <span className="text-xs text-primary font-medium">{campaign.category}</span>
+                    <span className="text-xs text-muted-foreground">{campaign.donorCount} donors</span>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{campaign.title}</h3>
-                  <p className="text-sm text-gray-600 line-clamp-2">{campaign.description}</p>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{campaign.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{campaign.description}</p>
                 </div>
 
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-900">
+                    <span className="text-sm font-medium text-foreground">
                       ${campaign.raised.toLocaleString()}
                     </span>
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-muted-foreground">
                       of ${campaign.goal.toLocaleString()}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-secondary rounded-full h-2">
                     <div
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      className="bg-primary h-2 rounded-full transition-all duration-300"
                       style={{ width: `${Math.min((campaign.raised / campaign.goal) * 100, 100)}%` }}
                     ></div>
                   </div>
-                  <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+                  <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
                     <span>{((campaign.raised / campaign.goal) * 100).toFixed(1)}% funded</span>
                     <span>Ends {new Date(campaign.endDate).toLocaleDateString()}</span>
                   </div>
@@ -171,9 +171,9 @@ export default function Campaigns() {
 
           {filteredCampaigns.length === 0 && (
             <Card className="text-center py-12">
-              <i className="ri-search-line text-4xl text-gray-400 mb-4"></i>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No campaigns found</h3>
-              <p className="text-gray-600 mb-4">Try adjusting your search or filter criteria</p>
+              <i className="ri-search-line text-4xl text-muted-foreground mb-4"></i>
+              <h3 className="text-lg font-medium text-foreground mb-2">No campaigns found</h3>
+              <p className="text-muted-foreground mb-4">Try adjusting your search or filter criteria</p>
               <Button onClick={() => { setSearchTerm(''); setFilter('all'); }}>
                 Clear Filters
               </Button>
@@ -183,13 +183,13 @@ export default function Campaigns() {
           {/* Create Campaign Modal */}
           {showCreateModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="bg-card rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900">Create New Campaign</h2>
+                    <h2 className="text-2xl font-bold text-foreground">Create New Campaign</h2>
                     <button
                       onClick={() => setShowCreateModal(false)}
-                      className="text-gray-400 hover:text-gray-600"
+                      className="text-muted-foreground hover:text-muted-foreground"
                     >
                       <i className="ri-close-line text-2xl"></i>
                     </button>
@@ -197,21 +197,21 @@ export default function Campaigns() {
 
                   <form className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Campaign Title
                       </label>
                       <input
                         type="text"
-                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full border border-border rounded-md px-3 py-2 focus:ring-2 focus:ring-ring focus:border-ring"
                         placeholder="Enter campaign title"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Category
                       </label>
-                      <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-8">
+                      <select className="w-full border border-border rounded-md px-3 py-2 focus:ring-2 focus:ring-ring focus:border-ring pr-8">
                         <option>Education</option>
                         <option>Healthcare</option>
                         <option>Environment</option>
@@ -222,39 +222,39 @@ export default function Campaigns() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                           Funding Goal ($)
                         </label>
                         <input
                           type="number"
-                          className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full border border-border rounded-md px-3 py-2 focus:ring-2 focus:ring-ring focus:border-ring"
                           placeholder="50000"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                           End Date
                         </label>
                         <input
                           type="date"
-                          className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full border border-border rounded-md px-3 py-2 focus:ring-2 focus:ring-ring focus:border-ring"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Description
                       </label>
                       <textarea
                         rows={4}
-                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full border border-border rounded-md px-3 py-2 focus:ring-2 focus:ring-ring focus:border-ring"
                         placeholder="Describe your campaign goals and impact..."
                         maxLength={500}
                       ></textarea>
                     </div>
 
-                    <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+                    <div className="flex items-center justify-end space-x-4 pt-6 border-t border-border">
                       <Button
                         variant="outline"
                         onClick={() => setShowCreateModal(false)}

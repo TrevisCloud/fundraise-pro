@@ -61,7 +61,7 @@ ChartContainer.displayName = "ChartContainer"
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
-    ([_, config]) => config.color
+    ([, itemConfig]) => itemConfig.color
   )
 
   if (!colorConfig.length) {
@@ -100,6 +100,15 @@ const ChartTooltip = React.forwardRef<
 })
 ChartTooltip.displayName = "ChartTooltip"
 
+interface TooltipPayloadItem {
+  dataKey?: string
+  name?: string
+  value?: number
+  fill?: string
+  color?: string
+  payload?: Record<string, unknown>
+}
+
 const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
@@ -125,7 +134,23 @@ const ChartTooltipContent = React.forwardRef<
       color,
       nameKey,
       labelKey,
-    }: any,
+    }: {
+      active?: boolean
+      payload?: TooltipPayloadItem[]
+      className?: string
+      indicator?: "line" | "dot" | "dashed"
+      hideLabel?: boolean
+      hideIndicator?: boolean
+      label?: string
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      labelFormatter?: (value: any, payload: any) => React.ReactNode
+      labelClassName?: string
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      formatter?: (value: any, name: string, item: any, index: number, payload: any) => React.ReactNode
+      color?: string
+      nameKey?: string
+      labelKey?: string
+    },
     ref
   ) => {
     const { config } = useChart()
@@ -179,10 +204,10 @@ const ChartTooltipContent = React.forwardRef<
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
-          {payload.map((item: any, index: number) => {
+          {payload.map((item: TooltipPayloadItem, index: number) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`
             const itemConfig = config[key]
-            const indicatorColor = color || item.payload.fill || item.color
+            const indicatorColor = color || item.payload?.fill || item.color
 
             return (
               <div

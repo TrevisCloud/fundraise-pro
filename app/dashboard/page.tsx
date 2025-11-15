@@ -5,11 +5,32 @@ import Navbar from '@/components/feature/Navbar';
 import Card from '@/components/base/Card';
 import Button from '@/components/base/Button';
 import { mockCampaigns, mockDonations } from '@/lib/mocks';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Legend } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Legend } from 'recharts';
 import { TrendingUp } from 'lucide-react';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { ChartContainer } from '@/components/ui/chart';
 
 export const dynamic = 'force-dynamic';
+
+interface ChartDataPoint {
+  date: string;
+  donations: number;
+  donors: number;
+}
+
+interface CategoryData {
+  category: string;
+  categoryName: string;
+  amount: number;
+  fill: string;
+  [key: string]: string | number;  // Index signature for Recharts compatibility
+}
+
+interface ChartConfig {
+  [key: string]: {
+    label?: string;
+    color?: string;
+  };
+}
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -21,7 +42,7 @@ export default function Dashboard() {
   });
 
   const [recentDonations, setRecentDonations] = useState(mockDonations.slice(0, 5));
-  const [chartData, setChartData] = useState<any[]>([]);
+  const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
 
   useEffect(() => {
     // Calculate stats
@@ -31,6 +52,7 @@ export default function Dashboard() {
     const totalDonors = mockCampaigns.reduce((sum, campaign) => sum + campaign.donorCount, 0);
     const avgDonation = totalRaised / mockDonations.length;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setStats({
       totalRaised,
       totalGoal,
@@ -69,14 +91,7 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  const campaignData = mockCampaigns.map(campaign => ({
-    name: campaign.title.substring(0, 20) + '...',
-    raised: campaign.raised,
-    goal: campaign.goal,
-    progress: (campaign.raised / campaign.goal) * 100
-  }));
-
-  const categoryData = mockCampaigns.reduce((acc: any[], campaign) => {
+  const categoryData = mockCampaigns.reduce((acc: CategoryData[], campaign) => {
     const existing = acc.find(item => item.categoryName === campaign.category);
     if (existing) {
       existing.amount += campaign.raised;
@@ -92,7 +107,7 @@ export default function Dashboard() {
     return acc;
   }, []);
 
-  const chartConfig = categoryData.reduce((config: any, item, index) => {
+  const chartConfig: ChartConfig = categoryData.reduce((config, item, index) => {
     const colors = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var(--chart-4)', 'var(--chart-5)'];
 
     config[item.category] = {
@@ -100,10 +115,9 @@ export default function Dashboard() {
       color: colors[index % colors.length]
     };
     return config;
-  }, { amount: { label: "Amount" } });
+  }, { amount: { label: "Amount", color: '' } } as ChartConfig);
 
   const totalCategoryAmount = categoryData.reduce((sum, item) => sum + item.amount, 0);
-  const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
   return (
     <div className="min-h-screen bg-background">
@@ -118,56 +132,56 @@ export default function Dashboard() {
           {/* KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
             <Card className="text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <i className="ri-money-dollar-circle-line text-2xl text-blue-600"></i>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <i className="ri-money-dollar-circle-line text-2xl text-primary"></i>
               </div>
               <h3 className="text-2xl font-bold text-foreground">${stats.totalRaised.toLocaleString()}</h3>
               <p className="text-sm text-muted-foreground">Total Raised</p>
-              <div className="mt-2 text-xs text-green-600">
+              <div className="mt-2 text-xs text-primary">
                 {((stats.totalRaised / stats.totalGoal) * 100).toFixed(1)}% of goal
               </div>
             </Card>
 
             <Card className="text-center">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <i className="ri-target-line text-2xl text-green-600"></i>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <i className="ri-flag-line text-2xl text-primary"></i>
               </div>
               <h3 className="text-2xl font-bold text-foreground">${stats.totalGoal.toLocaleString()}</h3>
               <p className="text-sm text-muted-foreground">Total Goal</p>
-              <div className="mt-2 text-xs text-blue-600">
+              <div className="mt-2 text-xs text-primary">
                 ${(stats.totalGoal - stats.totalRaised).toLocaleString()} remaining
               </div>
             </Card>
 
             <Card className="text-center">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <i className="ri-megaphone-line text-2xl text-purple-600"></i>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <i className="ri-megaphone-line text-2xl text-primary"></i>
               </div>
               <h3 className="text-2xl font-bold text-foreground">{stats.activeCampaigns}</h3>
               <p className="text-sm text-muted-foreground">Active Campaigns</p>
-              <div className="mt-2 text-xs text-purple-600">
+              <div className="mt-2 text-xs text-primary">
                 {mockCampaigns.length - stats.activeCampaigns} completed
               </div>
             </Card>
 
             <Card className="text-center">
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <i className="ri-group-line text-2xl text-orange-600"></i>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <i className="ri-group-line text-2xl text-primary"></i>
               </div>
               <h3 className="text-2xl font-bold text-foreground">{stats.totalDonors.toLocaleString()}</h3>
               <p className="text-sm text-muted-foreground">Total Donors</p>
-              <div className="mt-2 text-xs text-orange-600">
+              <div className="mt-2 text-xs text-primary">
                 Across all campaigns
               </div>
             </Card>
 
             <Card className="text-center">
-              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <i className="ri-heart-line text-2xl text-red-600"></i>
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <i className="ri-heart-line text-2xl text-primary"></i>
               </div>
               <h3 className="text-2xl font-bold text-foreground">${stats.avgDonation.toFixed(0)}</h3>
               <p className="text-sm text-muted-foreground">Avg Donation</p>
-              <div className="mt-2 text-xs text-red-600">
+              <div className="mt-2 text-xs text-primary">
                 Per transaction
               </div>
             </Card>
@@ -183,7 +197,7 @@ export default function Dashboard() {
                   <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip formatter={(value, name) => [`$${value}`, name === 'donations' ? 'Donations' : 'Donors']} />
-                  <Line type="monotone" dataKey="donations" stroke="#3B82F6" strokeWidth={2} />
+                  <Line type="monotone" dataKey="donations" stroke="#F97316" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </Card>
@@ -200,13 +214,7 @@ export default function Dashboard() {
                 >
                   <PieChart>
                     <Tooltip
-                      content={(props: any) => (
-                        <ChartTooltipContent
-                          {...props}
-                          hideLabel
-                          formatter={(value: any) => [`$${value.toLocaleString()}`, 'Amount']}
-                        />
-                      )}
+                      formatter={(value) => [`$${Number(value).toLocaleString()}`, 'Amount']}
                     />
                     <Pie
                       data={categoryData}
@@ -215,27 +223,30 @@ export default function Dashboard() {
                       cx="50%"
                       cy="45%"
                       outerRadius={80}
-                      label={({ percent }: any) => `${(percent * 100).toFixed(0)}%`}
+                      label={({ percent }: { percent?: number }) => `${((percent || 0) * 100).toFixed(0)}%`}
                       labelLine={false}
                     />
                     <Legend
                       verticalAlign="bottom"
                       height={36}
-                      content={({ payload }: any) => (
-                        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4">
-                          {payload?.map((entry: any, index: number) => (
-                            <div key={`legend-${index}`} className="flex items-center gap-2">
-                              <div
-                                className="w-3 h-3 rounded-sm"
-                                style={{ backgroundColor: entry.color }}
-                              />
-                              <span className="text-xs text-muted-foreground">
-                                {entry.value}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                      content={(props) => {
+                        const payload = props.payload as Array<{ value: string; color: string }> | undefined;
+                        return (
+                          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4">
+                            {payload?.map((entry, index: number) => (
+                              <div key={`legend-${index}`} className="flex items-center gap-2">
+                                <div
+                                  className="w-3 h-3 rounded-sm"
+                                  style={{ backgroundColor: entry.color }}
+                                />
+                                <span className="text-xs text-muted-foreground">
+                                  {entry.value}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      }}
                     />
                   </PieChart>
                 </ChartContainer>
@@ -272,8 +283,11 @@ export default function Dashboard() {
                     </div>
                     <div className="w-full bg-secondary rounded-full h-2">
                       <div
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${Math.min((campaign.raised / campaign.goal) * 100, 100)}%` }}
+                        className="h-2 rounded-full transition-all duration-300"
+                        style={{
+                          width: `${Math.min((campaign.raised / campaign.goal) * 100, 100)}%`,
+                          backgroundColor: '#F97316'
+                        }}
                       ></div>
                     </div>
                     <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
@@ -288,31 +302,47 @@ export default function Dashboard() {
             <Card>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-foreground">Recent Donations</h3>
-                <div className="flex items-center text-green-600 text-sm">
-                  <div className="w-2 h-2 bg-green-600 rounded-full mr-2 animate-pulse"></div>
+                <div className="flex items-center text-sm" style={{color: '#059669'}}>
+                  <div className="w-2 h-2 rounded-full mr-2 animate-pulse" style={{backgroundColor: '#059669'}}></div>
                   Live Updates
                 </div>
               </div>
               <div className="space-y-3">
-                {recentDonations.map((donation) => (
-                  <div key={donation.id} className="flex items-center justify-between p-3 bg-secondary rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <i className="ri-user-line text-blue-600"></i>
+                {recentDonations.map((donation, index) => {
+                  const campaign = mockCampaigns.find(c => c.id === donation.campaignId);
+                  const initials = donation.donorName.split(' ').map(n => n[0]).join('');
+                  const avatarColors = [
+                    { bg: '#DBEAFE', text: '#2563EB' },
+                    { bg: '#D1FAE5', text: '#059669' },
+                    { bg: '#E9D5FF', text: '#9333EA' },
+                    { bg: '#FFEDD5', text: '#F97316' },
+                    { bg: '#FEE2E2', text: '#DC2626' }
+                  ];
+                  const colorScheme = avatarColors[index % avatarColors.length];
+
+                  return (
+                    <div key={donation.id} className="flex items-center justify-between p-3 bg-secondary rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div
+                          className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm"
+                          style={{backgroundColor: colorScheme.bg, color: colorScheme.text}}
+                        >
+                          {initials}
+                        </div>
+                        <div>
+                          <p className="font-medium text-foreground text-sm">{donation.donorName}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {campaign?.title.substring(0, 30)}...
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-medium text-foreground text-sm">{donation.donorName}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {mockCampaigns.find(c => c.id === donation.campaignId)?.title.substring(0, 30)}...
-                        </p>
+                      <div className="text-right">
+                        <p className="font-semibold" style={{color: '#059669'}}>${donation.amount}</p>
+                        <p className="text-xs text-muted-foreground">{donation.date}</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-green-600">${donation.amount}</p>
-                      <p className="text-xs text-muted-foreground">{donation.date}</p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </Card>
           </div>
